@@ -28,12 +28,10 @@ const StarshipPage = (props) => {
 
   const {
     id,
-    model,
-    manufacturer,
-    length,
-    costInCredits,
-    passengers,
-    starshipClass,
+    name,
+    population,
+    diameter,
+    rotationPeriod,
   } = selectedItem;
 
   const LeftRowElement = (
@@ -51,12 +49,10 @@ const StarshipPage = (props) => {
       loadingState={loadingState}
       errorState={loadingError}
     >
-      <ListItem name="Model" value={model} />
-      <ListItem name="Class" value={starshipClass} />
-      <ListItem name="Manufacturer" value={manufacturer} />
-      <ListItem name="Length" value={length} />
-      <ListItem name="Cost" value={costInCredits} />
-      <ListItem name="Passengers" value={passengers} />
+      <ListItem name="Model" value={name} />
+      <ListItem name="Population" value={population} />
+      <ListItem name="Diameter" value={diameter} />
+      <ListItem name="Rotation period" value={rotationPeriod} />
     </ItemDetails>
   );
 
