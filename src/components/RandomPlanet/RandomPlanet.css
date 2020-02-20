@@ -1,0 +1,11 @@
+.random-planet {
+  display: flex;
+}
+
+.random-planet__list {
+  margin-left: 25px;
+}
+
+.random-planet__text-content {
+  margin-left: 50px;
+}

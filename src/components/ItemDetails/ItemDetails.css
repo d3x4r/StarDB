@@ -1,0 +1,32 @@
+.item-details {
+  display: flex;
+}
+
+.item-details__text-content {
+  margin-left: 20px;
+  flex-grow: 1;
+}
+
+.item-details__header {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.item-details__img-container {
+  position: relative;
+  width: 250px;
+  height: 310px;
+
+  overflow: hidden;
+}
+
+.item-details__img {
+  display: block;
+  position: absolute;
+  width: 100%;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}

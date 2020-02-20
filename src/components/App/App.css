@@ -1,0 +1,22 @@
+body {
+  font-family: 'Roboto', 'Arial', 'sans-serif';
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
+}
+
+::-moz-placeholder,
+:-moz-placeholder {
+  opacity: 1;
+}
+
+.block {
+  margin-top: 35px;
+  padding: 15px;
+
+  background-color: #303030;
+}

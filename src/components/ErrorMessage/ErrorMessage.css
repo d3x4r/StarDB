@@ -1,0 +1,12 @@
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.error-message__title {
+  text-transform: uppercase;
+}
