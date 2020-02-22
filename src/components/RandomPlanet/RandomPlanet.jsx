@@ -1,3 +1,4 @@
+/* eslint-disable react/state-in-constructor */
 import React from 'react';
 import './RandomPlanet.css';
 
@@ -48,7 +49,7 @@ const RandomPlanet = ({ data }) => {
       {content}
     </section>
   );
-}
+};
 
 RandomPlanet.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,

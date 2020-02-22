@@ -134,4 +134,9 @@ export default class SwapiService {
         return '';
     }
   };
+
+  getPlanetsIds = async () => {
+    const planets = await this.getPlanets();
+    return planets.map(({ id }) => id);
+  };
 }

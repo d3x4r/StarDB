@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import sample from 'lodash.sample';
 
 import './App.css';
 import Header from '../Header';
@@ -38,7 +39,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setRandomPlanet();
+    this.setRandomPlanet().then(() => setInterval(this.setRandomPlanet, 6000));
     this.setStarshipsList();
     this.setPeopleList();
     this.setPlanetsList();
@@ -50,10 +51,11 @@ class App extends Component {
   }
 
   setRandomPlanet = async () => {
-    const planetNumber = 4;
+    const planetIdList = await this.swapi.getPlanetsIds();
+    const randomPlanetId = sample(planetIdList);
 
     try {
-      const planet = await this.swapi.getPlanet(planetNumber);
+      const planet = await this.swapi.getPlanet(randomPlanetId);
       this.setState({
         randomPlanet: planet,
         loadingPlanetState: false,
@@ -164,7 +166,7 @@ class App extends Component {
         <Header />
         <RandomPlanet data={planetData} />
         <Switch>
-          <Route path="/" exact render={() => <h2>Welcome to StarDB</h2>} />
+          <Route path="/" exact render={() => <h2 className="text-center mt-3">Welcome to StarDB</h2>} />
           <Route path="/people/:id?">
             <PeoplePage
               items={people}
