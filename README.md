@@ -2,7 +2,7 @@
 
 Used: React/React router/Bootstrap/Fetch/Create React App
 
-Watch online [star-w-db.surge.sh](star-w-db.surge.sh).
+Watch online [http://star-w-db.surge.sh/](http://star-w-db.surge.sh/).
 
 ## Available Scripts
 
