@@ -49,7 +49,7 @@ export default class SwapiService {
 
   transformPlanetData = (planet) => {
     const {
-      name, diameter, population, rotation_period, url,
+      name, diameter, population, rotation_period, url, terrain, gravity, surface_water,
     } = planet;
 
     const id = this.getIdFromUrl(url);
@@ -63,6 +63,9 @@ export default class SwapiService {
       diameter,
       rotationPeriod: rotation_period,
       img,
+      terrain,
+      gravity,
+      surfaceWater: surface_water,
     });
   }
 

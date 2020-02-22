@@ -1,28 +1,68 @@
-import React from 'react';
+/* eslint-disable react/state-in-constructor */
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import cn from 'classnames';
 
-const Header = () => (
-  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a className="navbar-brand" href="/#">Star DB</a>
-    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon" />
-    </button>
+class Header extends Component {
+  state = {
+    links: [
+      {
+        name: 'People',
+        target: '/people/',
+        active: false,
+      },
+      {
+        name: 'Planets',
+        target: '/planets/',
+        active: false,
+      },
+      {
+        name: 'Starships',
+        target: '/starships/',
+        active: false,
+      },
+    ],
+  }
 
-    <div className="collapse navbar-collapse" id="navbarColor02">
-      <ul className="navbar-nav mr-auto">
-        <li className="nav-item active">
-          <a className="nav-link" href="/#">
-            People
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/#">Planets</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/#">Starships</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-);
+  onClickHandler = ({ target }) => {
+    const { links } = this.state;
+    const targetLinkName = target.dataset.name;
+
+    const updatedState = links.map((link) => {
+      const { name } = link;
+      if (name === targetLinkName) {
+        return { ...link, active: true };
+      }
+      return { ...link, active: false };
+    });
+
+    this.setState({ links: updatedState });
+  };
+
+  renderButtons = () => {
+    const { links } = this.state;
+    return links.map(({ target, name, active }) => {
+      const classNames = cn({
+        'nav-item': true,
+        active,
+      });
+      return <li className={classNames} key={name}><Link className="nav-link" to={target} data-name={name} onClick={this.onClickHandler}>{name}</Link></li>;
+    });
+  };
+
+  render() {
+    return (
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <Link className="navbar-brand" to="/">Star DB</Link>
+
+        <div>
+          <ul className="navbar-nav mr-auto">
+            {this.renderButtons()}
+          </ul>
+        </div>
+      </nav>
+    );
+  }
+}
 
 export default Header;

@@ -8,19 +8,16 @@ const renderItems = (props) => {
   const {
     items,
     onClickHandler,
-    selectedItemId,
     getLabel,
   } = props;
 
   return items.map((item) => {
     const { id } = item;
-    const defaulClassName = 'list-group-item list-group-item-action';
-    const itemClassName = selectedItemId === id ? `${defaulClassName} active` : defaulClassName;
     const label = getLabel(item);
     return (
       <a
         href="/#"
-        className={itemClassName}
+        className="list-group-item list-group-item-action"
         key={id}
         onClick={onClickHandler(id)}
       >

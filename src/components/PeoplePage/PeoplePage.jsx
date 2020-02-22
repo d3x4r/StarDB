@@ -1,62 +1,79 @@
 /* eslint-disable react/state-in-constructor */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Items from '../Items';
-import ItemDetails from '../ItemDetails';
+import { withRouter } from 'react-router-dom';
 import Row from '../Row';
+import PersonDetails from '../PersonDetails';
+import Items from '../Items';
 import ErrorBoundy from '../ErrorBoundry';
-import ListItem from '../ListItem';
 
-const PeoplePage = (props) => {
-  const { data } = props;
+class PeoplePage extends Component {
+  componentDidMount() {
+    const { match, onPersonSelect, selectedItem } = this.props;
+    const { id } = match.params;
+    if (id && selectedItem.id !== id) {
+      onPersonSelect(id);
+    }
+  }
 
-  const {
-    items,
-    onItemSelect,
-    selectedItem,
-    loadingState,
-    loadingError,
-  } = data;
+  getLabel = ({ name }) => name;
 
-  const getLabel = ({ name }) => name;
+  setPerson = (personId) => (evt) => {
+    const { onPersonSelect, history } = this.props;
+    evt.preventDefault();
+    history.push(`/people/${personId}`);
+    onPersonSelect(personId);
+  };
 
-  const {
-    id,
-    gender,
-    birthYear,
-    eyeColor,
-  } = selectedItem;
+  render() {
+    const {
+      items,
+      selectedItem,
+      loadingState,
+      errorState,
+      match: { params },
+    } = this.props;
 
-  const LeftRowElement = (
-    <Items
-      items={items}
-      onClickHandler={onItemSelect}
-      selectedItemId={id}
-      getLabel={getLabel}
-    />
-  );
+    const { id } = params;
 
-  const rightRowElement = (
-    <ItemDetails
-      selectedItem={selectedItem}
-      loadingState={loadingState}
-      errorState={loadingError}
-    >
-      <ListItem name="Gender" value={gender} />
-      <ListItem name="Birth Year" value={birthYear} />
-      <ListItem name="Eye color" value={eyeColor} />
-    </ItemDetails>
-  );
+    const dataToDetails = id ? selectedItem : {};
 
-  return (
-    <ErrorBoundy>
-      <Row leftElement={LeftRowElement} rightElement={rightRowElement} />
-    </ErrorBoundy>
-  );
+    const PersonList = (
+      <Items
+        items={items}
+        onClickHandler={this.setPerson}
+        getLabel={this.getLabel}
+      />
+    );
+
+    const Details = (
+      <PersonDetails
+        selectedItem={dataToDetails}
+        loadingState={loadingState}
+        errorState={errorState}
+      />
+    );
+
+    return (
+      <ErrorBoundy>
+        <Row leftElement={PersonList} rightElement={Details} />
+      </ErrorBoundy>
+    );
+  }
+}
+
+PeoplePage.defaultProps = {
+  items: [],
 };
 
 PeoplePage.propTypes = {
-  data: PropTypes.instanceOf(Object).isRequired,
+  items: PropTypes.instanceOf(Array),
+  onPersonSelect: PropTypes.func.isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
+  selectedItem: PropTypes.instanceOf(Object).isRequired,
+  loadingState: PropTypes.bool.isRequired,
+  errorState: PropTypes.bool.isRequired,
+  match: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default PeoplePage;
+export default withRouter(PeoplePage);

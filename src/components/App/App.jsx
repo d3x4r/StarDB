@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import './App.css';
 import Header from '../Header';
@@ -7,6 +8,8 @@ import RandomPlanet from '../RandomPlanet';
 import PeoplePage from '../PeoplePage';
 import StarshipPage from '../StarshipsPage';
 import PlanetsPage from '../PlanetsPage';
+import StarshipDetails from '../StarshipDetails';
+import PlanetDetails from '../PlanetDetails';
 
 import SwapiService from '../../services';
 import ErrorMessage from '../ErrorMessage';
@@ -21,9 +24,9 @@ class App extends Component {
     loadingPlanetState: true,
     loadingItemDetailState: false,
     loadingItemError: false,
-    loadingStarshipDetailState: false,
+    loadingStarshipDetailState: true,
     loadingStarshipError: false,
-    loadingPlanetsDetailsState: false,
+    loadingPlanetsDetailsState: true,
     loadingPlanetsError: false,
     people: null,
     starships: null,
@@ -111,20 +114,17 @@ class App extends Component {
     }
   }
 
-  onPersonSelect = (id) => async (evt) => {
-    evt.preventDefault();
+  onPersonSelect = async (id) => {
     this.setState({ loadingItemDetailState: true, loadingItemError: false });
     this.setPerson(id);
   }
 
-  onStarshipSelect = (id) => async (evt) => {
-    evt.preventDefault();
+  onStarshipSelect = async (id) => {
     this.setState({ loadingStarshipDetailState: true, loadingStarshipError: false });
     this.setStarship(id);
   }
 
-  onPlanetSelect = (id) => async (evt) => {
-    evt.preventDefault();
+  onPlanetSelect = async (id) => {
     this.setState({ loadingPlanetsDetailsState: true, loadingPlanetsError: false });
     this.setPlanet(id);
   }
@@ -155,43 +155,66 @@ class App extends Component {
       errorState: loadingPlanetError,
     };
 
-    const peopleData = {
-      items: people,
-      onItemSelect: this.onPersonSelect,
-      selectedItem: selectedPerson,
-      loadingState: loadingItemDetailState,
-      loadingError: loadingItemError,
-    };
-
-    const starshipsData = {
-      items: starships,
-      onItemSelect: this.onStarshipSelect,
-      selectedItem: selectedStarship,
-      loadingState: loadingStarshipDetailState,
-      loadingError: loadingStarshipError,
-    };
-
-    const planetsData = {
-      items: planets,
-      onItemSelect: this.onPlanetSelect,
-      selectedItem: selectedPlanet,
-      loadingState: loadingPlanetsDetailsState,
-      loadingError: loadingPlanetsError,
-    };
-
     if (appError) {
       return <ErrorMessage />;
     }
 
-
     return (
-      <>
+      <Router>
         <Header />
         <RandomPlanet data={planetData} />
-        <PeoplePage data={peopleData} />
-        <StarshipPage data={starshipsData} />
-        <PlanetsPage data={planetsData} />
-      </>
+        <Switch>
+          <Route path="/" exact render={() => <h2>Welcome to StarDB</h2>} />
+          <Route path="/people/:id?">
+            <PeoplePage
+              items={people}
+              onPersonSelect={this.onPersonSelect}
+              selectedItem={selectedPerson}
+              loadingState={loadingItemDetailState}
+              errorState={loadingItemError}
+            />
+          </Route>
+          <Route path="/starships/" exact>
+            <StarshipPage items={starships} onStarshipSelect={this.onStarshipSelect} />
+          </Route>
+          <Route path="/planets/" exact>
+            <PlanetsPage items={planets} onPlanetSelect={this.onPlanetSelect} />
+          </Route>
+          <Route
+            path="/starships/:id"
+            render={({ match }) => {
+              const { id } = match.params;
+              if (selectedStarship.id !== id) {
+                this.setStarship(id);
+              }
+              return (
+                <StarshipDetails
+                  selectedItem={selectedStarship}
+                  loadingState={loadingStarshipDetailState}
+                  errorState={loadingStarshipError}
+                />
+              );
+            }}
+          />
+          <Route
+            path="/planets/:id"
+            render={({ match }) => {
+              const { id } = match.params;
+              if (selectedPlanet.id !== id) {
+                this.setPlanet(id);
+              }
+              return (
+                <PlanetDetails
+                  selectedItem={selectedPlanet}
+                  loadingState={loadingPlanetsDetailsState}
+                  errorState={loadingPlanetsError}
+                />
+              );
+            }}
+          />
+          <Route render={() => <h2>PAGE NOT FOUND</h2>} />
+        </Switch>
+      </Router>
     );
   }
 }
